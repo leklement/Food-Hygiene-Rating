@@ -1,68 +1,28 @@
-import { useState, useEffect } from "react";
-import { getEstablishmentRatings } from "../../lib/api/ratingsAPI";
-import { APIClient } from "../../lib/api";
+import { useState } from "react";
 import {
   EstablishmentsTable,
   EstablishmentsTableNavigation,
 } from "../EstablishmentsTable";
 import styles from "./styles.module.scss";
+import { useSelectEstablishments } from "../../lib/hooks/useSelectEstablishments";
 
 /* Template
 -------------------------------------------------------------------------*/
 
 export const PaginatedEstablishmentsTable = () => {
-  const [error, setError] = useState<{
-    message: string;
-    [key: string]: string;
-  }>();
-  const [establishments, setEstablishments] = useState<
-    { [key: string]: string }[]
-  >([]);
   const [pageNum, setPageNum] = useState(1);
   const [pageCount] = useState(100);
 
-  useEffect(() => {
-    APIClient.getEstablishmentRatings(pageNum).then(
-      (result) => {
-        if (!result) {
-          setError({
-            message: "Not found",
-          });
-          return;
-        }
+  // Hooks
 
-        setEstablishments(result?.establishments);
-      },
-      (error) => {
-        setError(error);
-      }
-    );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { establishments, error } = useSelectEstablishments(pageNum);
 
   async function handlePreviousPage() {
     pageNum > 1 && setPageNum(pageNum - 1);
-    getEstablishmentRatings(pageNum).then(
-      (result) => {
-        setEstablishments(result.establishments);
-      },
-      (error) => {
-        setError(error);
-      }
-    );
   }
 
   async function handleNextPage() {
     pageNum < pageCount && setPageNum(pageNum + 1);
-    getEstablishmentRatings(pageNum).then(
-      (result) => {
-        setEstablishments(result.establishments);
-      },
-      (error) => {
-        setError(error);
-      }
-    );
   }
 
   if (error) {
