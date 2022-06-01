@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
-import { EstablishmentsTable } from "./EstablishmentsTable";
-import { EstablishmentsTableNavigation } from "./EstablishmentsTableNavigation";
-import { getEstablishmentRatings } from "../api/ratingsAPI";
+import { getEstablishmentRatings } from "../../lib/api/ratingsAPI";
+import { APIClient } from "../../lib/api";
+import {
+  EstablishmentsTable,
+  EstablishmentsTableNavigation,
+} from "../EstablishmentsTable";
+import styles from "./styles.module.scss";
 
-const tableStyle = {
-  background: "rgba(51, 51, 51, 0.9)",
-  padding: "10px",
-  width: "max-content",
-  marginLeft: "50px",
-  color: "white",
-};
+/* Template
+-------------------------------------------------------------------------*/
 
 export const PaginatedEstablishmentsTable = () => {
-  const [error, setError] =
-    useState<{ message: string; [key: string]: string }>();
+  const [error, setError] = useState<{
+    message: string;
+    [key: string]: string;
+  }>();
   const [establishments, setEstablishments] = useState<
     { [key: string]: string }[]
   >([]);
@@ -21,14 +22,22 @@ export const PaginatedEstablishmentsTable = () => {
   const [pageCount] = useState(100);
 
   useEffect(() => {
-    getEstablishmentRatings(pageNum).then(
+    APIClient.getEstablishmentRatings(pageNum).then(
       (result) => {
+        if (!result) {
+          setError({
+            message: "Not found",
+          });
+          return;
+        }
+
         setEstablishments(result?.establishments);
       },
       (error) => {
         setError(error);
       }
     );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -60,7 +69,7 @@ export const PaginatedEstablishmentsTable = () => {
     return <div>Error: {error.message}</div>;
   } else {
     return (
-      <div style={tableStyle}>
+      <div className={styles.PaginatedEstablishmentsTable}>
         <h2>Food Hygiene Ratings</h2>
         <EstablishmentsTable establishments={establishments} />
         <EstablishmentsTableNavigation

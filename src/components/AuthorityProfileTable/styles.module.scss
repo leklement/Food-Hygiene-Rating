@@ -1,0 +1,11 @@
+.AuthorityProfileTable {
+  margin: 20px 0px;
+  background-color: white;
+  border-spacing: 0px;
+
+  .headCell,
+  .bodyCell {
+    padding: 8px 12px;
+    border: 1px solid rgb(214, 213, 213);
+  }
+}
