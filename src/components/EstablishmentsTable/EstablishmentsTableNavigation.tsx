@@ -2,12 +2,18 @@ const buttonStyle = {
   margin: "0 5px",
 };
 
+/* Outer props
+-------------------------------------------------------------------------*/
+
 type EstablishmentsTableNavigationType = {
   pageNum: number;
   pageCount: number;
   onPreviousPage: () => void;
   onNextPage: () => void;
 };
+
+/* Template
+-------------------------------------------------------------------------*/
 
 export const EstablishmentsTableNavigation = (
   props: EstablishmentsTableNavigationType

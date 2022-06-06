@@ -1,0 +1,1 @@
+export { PaginatedEstablishmentsTable } from "./PaginatedEstablishmentsTable";

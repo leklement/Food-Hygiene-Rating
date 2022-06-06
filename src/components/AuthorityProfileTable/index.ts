@@ -1,0 +1,1 @@
+export { AuthorityProfileTable } from "./AuthorityProfileTable";
